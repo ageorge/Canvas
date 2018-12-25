@@ -1,0 +1,289 @@
+#! import FileChooserIconLayout kivy.uix.filechooser 
+
+ScreenManagement:
+    HomeScreen:
+    LoginScreen:
+    DashBoardScreen:
+    CourseScreenStudent:
+    CourseScreenAdmin:
+    AnnouncementScreen:
+    NewAnnouncementScreen:
+    AssignmentScreen:
+    NewAssignmentScreen:
+    PeopleScreen:
+    ExisitingPeopleScreen:
+    NewPeopleScreen:
+    FileScreen:
+    FileScreenDisplay:
+    GradesScreen:
+    ChangePassword:
+
+<HomeScreen>:
+    name:'home'
+    BoxLayout:
+        orientation:'vertical'
+        Label:
+            text: 'Welcome to Canvas'
+        Button:
+            text: 'Login'
+            on_press: root.manager.current = 'login'
+
+<LoginScreen>:
+    name: 'login'
+    on_leave: root.clear()
+    GridLayout:
+        cols:2
+        Label:
+            text: 'User Name'
+        TextInput:
+            id: username
+        Label:
+            text: 'Password'
+        TextInput:
+            id: password
+            password: True
+        Button:
+            on_press: root.onLogin()
+            text: 'Login'
+        Button:
+            on_press: root.onLogout()
+            text: 'Back'
+	    Label:
+            id: msg
+	        text: ''
+
+
+<DashBoardScreen>:
+    name: 'DB'
+    on_enter:root.getCourses()  
+    on_leave:root.clear()
+    GridLayout:
+        id: mylayout
+        cols:2
+
+<CourseScreenStudent>:
+    name: 'coursestu'
+    on_enter: root.initial()
+    on_leave: root.clear()
+    GridLayout: 
+        cols:2
+        Label:
+            text: 'Welcome'
+            id: info
+        Label: 
+            id: msg
+            text: ''
+        Button:
+            on_press: root.manager.current = 'filestu'
+            text: 'Files'
+        Button:
+            on_press: root.displayGrades()
+            text: 'Grades'
+        Button:
+            on_press: root.displayAssignments()
+            text: 'Assignments'
+        Button:
+            on_press: root.displayPeople()
+            text: 'People'
+        Button:
+            on_press: root.displayAnnouncements()
+            text: 'Announcements'
+        Button:
+            on_press: root.manager.current = 'DB'
+            text: 'Back'
+
+<CourseScreenAdmin>:
+    name: 'courseadmin'
+    on_enter: root.initial()
+    on_leave: root.clear()
+    GridLayout:
+        cols:2
+        Label:
+            text: 'Welcome'
+            id: info
+        Label: 
+            id: msg
+            text: ''
+        Button:
+            on_press: root.manager.current = 'filestu'
+            text: 'Files'
+        Button:
+            on_press: root.manager.current = 'grades'
+            text: 'Grades'
+        Button:
+            on_press: root.manager.current = 'assignment'
+            text: 'Assignments'
+        Button:
+            on_press: root.manager.current = 'people'
+            text: 'People'
+        Button:
+            on_press: root.manager.current = 'ann'
+            text: 'Announcements'
+        Button:
+            on_press: root.manager.current = 'DB'
+            text: 'Back'
+
+<AnnouncementScreen>:
+    name: 'ann'
+    on_enter:root.getAllAnnouncement()  
+    on_leave:root.clear()
+    GridLayout:
+        id: mylayout
+        cols:2
+
+<AssignmentScreen>:
+    name: 'assignment'
+    on_enter:root.getAllAssignment()  
+    on_leave:root.clear()
+    GridLayout:
+        id: mylayout
+        cols:3
+
+<NewAnnouncementScreen>:
+    name: 'newann'
+    on_leave:root.clear()
+    GridLayout:
+        cols:2
+        Label:
+            text: 'Title'
+        TextInput:
+            id: name
+        Label:
+            text: 'Message'
+        TextInput:
+            id: annmsg
+        Button:
+            on_press: root.newAnnouncement()
+            text: 'Add'
+        Button:
+            on_press: root.manager.current = 'courseadmin'
+            text: 'Back'
+
+<NewAssignmentScreen>:
+    name: 'newassignment'
+    on_leave:root.clear()
+    GridLayout:
+        cols:2
+        Label:
+            text: 'Assignment Name'
+        TextInput:
+            id: name
+        Label:
+            text: 'Description'
+        TextInput:
+            id: desc
+        Label:
+            text: 'Points'
+        TextInput:
+            id: points
+        Label:
+            text: 'Due Date (YYYY-MM-DD)'
+        TextInput:
+            id: due
+        Button:
+            on_press: root.newAssignment()
+            text: 'Add'
+        Button:
+            on_press: root.manager.current = 'courseadmin'
+            text: 'Back'
+
+<PeopleScreen>:
+    name: 'people'
+    on_enter:root.displayPeople() 
+    on_leave:root.clear()
+    GridLayout:
+        cols:3
+        id: mylayout
+
+<ExisitingPeopleScreen>:
+    name: 'addexistingpeople'
+    on_leave:root.clear()
+    GridLayout:
+        cols:2
+        Label:
+            text: 'Username'
+        TextInput:
+            id: username
+        Button:
+            on_press: root.addexistingPeople()
+            text: 'Add'
+        Button:
+            on_press: root.manager.current = 'courseadmin'
+            text: 'Back'
+
+<NewPeopleScreen>:
+    name: 'newpeople'
+    on_leave:root.clear()
+    GridLayout:
+        cols:2
+        Label:
+            text: 'Name'
+        TextInput:
+            id: name
+        Label:
+            text: 'Username'
+        TextInput:
+            id: username
+        Label:
+            text: 'Default Password'
+        TextInput:
+            id: pwd
+            text: 'student100'
+        Button:
+            on_press: root.newPeople()
+            text: 'Add'
+        Button:
+            on_press: root.manager.current = 'courseadmin'
+            text: 'Back'
+
+<FileScreen>:
+    name: 'file'
+    BoxLayout:
+        orientation:'vertical' 
+        FileChooserIconView:
+            path: '/Users/anitageorge/'
+            id: fc
+            on_selection: root.selectFile()
+        Button:
+            on_press: root.saveFile()
+            size_hint_y: None
+            text: 'Add'
+        Button:
+            on_press: root.manager.current = 'courseadmin'
+            size_hint_y: None
+            text: 'Back'
+
+<FileScreenDisplay>:
+    name: 'filestu'
+    on_enter:root.displayFiles() 
+    on_leave:root.clear()
+    GridLayout:
+        cols:2
+        id: mylayout
+
+<GradesScreen>:
+    name: 'grades'
+    on_enter:root.displayAssignments() 
+    on_leave:root.clear()
+    GridLayout: 
+        id: mylayout    
+
+<ChangePassword>:
+    name: 'pwd'
+    on_leave: root.clear()
+    GridLayout:
+        cols:2
+        Label:
+            text: 'New Password'
+        TextInput:
+            id: newpass
+            password: True
+        Button:
+            on_press: root.change()
+            text: 'Change'
+        Button:
+            on_press: root.manager.current = 'DB'
+            text: 'Back'
+        Label:
+            id: msg
+            text: ''
